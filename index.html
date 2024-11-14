@@ -253,6 +253,7 @@
         const restCountdown = document.getElementById('timer');
 
         let exercise, sets, repsPerSet, currentReps, currentSet, restTime, stage;
+        let isResting = false; // Flag to control exercise tracking during rest time
         const circleCircumference = 251.2; // Circumference based on radius in SVG (r=40)
 
         function startExercise() {
@@ -263,6 +264,7 @@
             currentReps = 0;
             currentSet = 1;
             stage = null;
+            isResting = false;
 
             exerciseNameElement.innerText = exercise.charAt(0).toUpperCase() + exercise.slice(1);
             document.getElementById('question4').classList.remove('active');
@@ -273,7 +275,7 @@
 
         function updateProgress() {
             const progress = (currentReps / repsPerSet) * circleCircumference;
-            progressCircle.style.strokeDashoffset = circleCircumference - progress;
+            progressCircle.style.stroke-dashoffset = circleCircumference - progress;
             counterElement.innerText = currentReps;
         }
 
@@ -320,6 +322,8 @@
         }
 
         function onPoseResults(results) {
+            if (isResting) return; // Skip tracking during rest period
+
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
             if (results.poseLandmarks) {
                 drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
@@ -402,6 +406,7 @@
         }
 
         function startRestTimer() {
+            isResting = true; // Activate rest period
             restTimerElement.style.display = 'block';
             let timeLeft = restTime;
             restCountdown.innerText = timeLeft;
@@ -412,6 +417,7 @@
                 if (timeLeft <= 0) {
                     clearInterval(restInterval);
                     restTimerElement.style.display = 'none';
+                    isResting = false; // Deactivate rest period and resume exercise tracking
                 }
             }, 1000);
         }
