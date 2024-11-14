@@ -204,7 +204,7 @@
 
         function updateProgress() {
             const progress = (currentReps / repsPerSet) * circleCircumference;
-            progressCircle.style.stroke-dashoffset = circleCircumference - progress;
+            progressCircle.style.strokeDashoffset = circleCircumference - progress;
             counterElement.innerText = currentReps;
         }
 
