@@ -15,132 +15,89 @@
         body, html {
             width: 100%;
             height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;
+            color: #333;
             overflow: hidden;
-            background-color: #000;
-            color: #fff;
         }
         .page {
+            width: 100%;
+            height: 100%;
             display: none;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             text-align: center;
             padding: 20px;
-            width: 100%;
-            height: 100%;
         }
         .active {
             display: flex;
         }
         h1 {
-            font-size: 2rem;
-            color: #fff;
+            font-size: 3rem;
+            color: #0056b3;
             margin-bottom: 2rem;
+            text-align: center;
         }
         label {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #ccc;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #333;
+            text-align: center;
             width: 100%;
         }
         select, input, button {
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
-            padding: 10px 15px;
-            width: 90%;
-            max-width: 350px;
+            font-size: 2rem;
+            margin: 1rem 0;
+            padding: 15px 20px;
+            width: 80%;
+            max-width: 600px;
             border-radius: 8px;
             border: none;
             outline: none;
+            transition: all 0.3s ease;
             text-align: center;
         }
         select, input {
-            background-color: #333;
-            color: #fff;
+            background-color: #e0e0e0;
+            color: #333;
         }
         button {
-            background-color: #ff007f;
+            background-color: #0056b3;
             color: #fff;
             font-weight: bold;
             cursor: pointer;
         }
         button:hover {
-            background-color: #ff3366;
+            background-color: #003e8a;
         }
-        /* Dynamic Island Style with Round Progress */
-        .dynamic-island {
+        /* Countdown Timer Styling */
+        #countdown {
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 35px;
+            font-size: 8rem;
+            color: #FF0000;
+            animation: fade 1s ease;
             z-index: 10;
-        }
-        .circle-progress {
-            position: relative;
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .circle-progress svg {
-            transform: rotate(-90deg);
-            width: 100%;
-            height: 100%;
-        }
-        .circle-progress circle {
-            fill: none;
-            stroke-width: 10;
-        }
-        .circle-background {
-            stroke: #333;
-        }
-        .circle-foreground {
-            stroke: #ff007f;
-            stroke-dasharray: 251.2;
-            transition: stroke-dashoffset 0.3s;
-        }
-        .reps-count {
-            position: absolute;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #fff;
-        }
-        .island-content {
-            margin-left: 15px;
-            text-align: left;
-        }
-        .island-content h2 {
-            font-size: 1.4rem;
-            margin: 0;
-            color: #fff;
-        }
-        /* Rest Timer Styling */
-        .rest-timer {
-            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 3rem;
-            color: #ff007f;
-            display: none;
-            text-align: center;
         }
-        /* Full-screen Video Styling */
+        @keyframes fade {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        /* Camera Page Styling */
         #video-container {
-            position: absolute;
-            top: 0;
-            left: 0;
+            position: relative;
             width: 100%;
-            height: 100%;
+            max-width: 800px;
+            aspect-ratio: 4/3;
+            margin-top: 10px;
+            border-radius: 15px;
             overflow: hidden;
-            z-index: 1;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         video, canvas {
             position: absolute;
@@ -148,18 +105,51 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
         }
-        .completed-message {
+        #counter {
+            position: absolute;
+            top: 15px;
+            left: 15px;
             font-size: 2rem;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 5;
+        }
+        #status {
+            font-size: 2rem;
+            color: #0056b3;
+            text-align: center;
+            margin-top: 20px;
+        }
+        /* Progress Bar Styling */
+        .progress-container {
+            width: 100%;
+            max-width: 800px;
+            height: 25px;
+            background-color: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #0056b3;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        /* Exercise Completed Page */
+        .completed-message {
+            font-size: 3rem;
             color: #28a745;
             margin-bottom: 20px;
             text-align: center;
         }
         .home-button {
-            font-size: 1rem;
-            padding: 10px 20px;
-            background-color: #ff007f;
+            font-size: 1.5rem;
+            padding: 15px 30px;
+            background-color: #0056b3;
             color: #fff;
             border: none;
             border-radius: 8px;
@@ -167,7 +157,7 @@
             transition: background-color 0.3s;
         }
         .home-button:hover {
-            background-color: #ff3366;
+            background-color: #003e8a;
         }
     </style>
 </head>
@@ -205,27 +195,20 @@
         <button onclick="startExercise()">Start Exercise</button>
     </div>
 
-    <!-- Page 2: Exercise Tracking with Full-Screen Video -->
+    <!-- Page 2: Exercise Tracking with Countdown -->
     <div id="exercisePage" class="page">
+        <h1>Exercise Tracker</h1>
+        <div id="countdown"></div>
         <div id="video-container">
+            <div id="counter">Set: 1 | Reps: 0</div>
             <video id="webcam" autoplay playsinline></video>
             <canvas id="output"></canvas>
         </div>
-        <!-- Dynamic Island with Round Progress Bar -->
-        <div class="dynamic-island" id="counter">
-            <div class="circle-progress">
-                <svg>
-                    <circle class="circle-background" cx="40" cy="40" r="40"></circle>
-                    <circle class="circle-foreground" cx="40" cy="40" r="40" style="stroke-dashoffset: 251.2;"></circle>
-                </svg>
-                <div class="reps-count" id="reps-count">0</div>
-            </div>
-            <div class="island-content">
-                <h2 id="exercise-name"></h2>
-            </div>
+        <p id="status"></p>
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
         </div>
-        <!-- Rest Timer Display -->
-        <div class="rest-timer" id="rest-timer">Rest: <span id="timer">0</span>s</div>
     </div>
 
     <!-- Page 3: Exercise Completed -->
@@ -237,6 +220,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils"></script>
+
     <script>
         function nextQuestion(current, next) {
             document.getElementById(current).classList.remove('active');
@@ -246,42 +230,64 @@
         const videoElement = document.getElementById('webcam');
         const canvasElement = document.getElementById('output');
         const canvasCtx = canvasElement.getContext('2d');
-        const counterElement = document.getElementById('reps-count');
-        const exerciseNameElement = document.getElementById('exercise-name');
-        const progressCircle = document.querySelector('.circle-foreground');
-        const restTimerElement = document.getElementById('rest-timer');
-        const restCountdown = document.getElementById('timer');
+        const counterElement = document.getElementById('counter');
+        const progressBar = document.getElementById('progress-bar');
+        const countdownElement = document.getElementById('countdown');
 
-        let exercise, sets, repsPerSet, currentReps, currentSet, restTime, stage;
-        let isResting = false; // Flag to control exercise tracking during rest time
-        const circleCircumference = 251.2; // Circumference based on radius in SVG (r=40)
+        let exercise, sets, repsPerSet, totalReps, totalRepsCompleted, currentSet, currentReps, stage;
+        let restTimeBetweenSets;
+        let isResting = false; // Flag to control tracking during rest periods
+
+        function resetExercise() {
+            exercise = "";
+            sets = 0;
+            repsPerSet = 0;
+            totalReps = 0;
+            totalRepsCompleted = 0;
+            currentSet = 1;
+            currentReps = 0;
+            stage = null;
+            isResting = false;
+            counterElement.innerText = Set: 1 | Reps: 0;
+            progressBar.style.width = "0%";
+        }
 
         function startExercise() {
             exercise = document.getElementById('exercise').value;
             sets = parseInt(document.getElementById('sets').value);
             repsPerSet = parseInt(document.getElementById('reps').value);
-            restTime = parseInt(document.getElementById('restTime').value);
-            currentReps = 0;
+            restTimeBetweenSets = parseInt(document.getElementById('restTime').value);
+            totalReps = sets * repsPerSet;
+            totalRepsCompleted = 0;
             currentSet = 1;
+            currentReps = 0;
             stage = null;
-            isResting = false;
 
-            exerciseNameElement.innerText = exercise.charAt(0).toUpperCase() + exercise.slice(1);
             document.getElementById('question4').classList.remove('active');
             document.getElementById('exercisePage').classList.add('active');
 
-            initializeExerciseTracking();
+            startCountdown(5); // Start a 5-second countdown before beginning the exercise
         }
 
-        function updateProgress() {
-            const progress = (currentReps / repsPerSet) * circleCircumference;
-            progressCircle.style.stroke-dashoffset = circleCircumference - progress;
-            counterElement.innerText = currentReps;
+        function startCountdown(seconds) {
+            countdownElement.style.display = "block";
+            countdownElement.innerText = seconds;
+
+            const countdownInterval = setInterval(() => {
+                seconds--;
+                if (seconds > 0) {
+                    countdownElement.innerText = seconds;
+                } else {
+                    clearInterval(countdownInterval);
+                    countdownElement.style.display = "none";
+                    initializeExerciseTracking();
+                }
+            }, 1000);
         }
 
         function initializeExerciseTracking() {
             const pose = new Pose({
-                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+                locateFile: (file) => https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}
             });
             pose.setOptions({
                 modelComplexity: 1,
@@ -322,7 +328,7 @@
         }
 
         function onPoseResults(results) {
-            if (isResting) return; // Skip tracking during rest period
+            if (isResting) return; // Skip processing during rest period
 
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
             if (results.poseLandmarks) {
@@ -331,12 +337,12 @@
                 drawLandmarks(canvasCtx, results.poseLandmarks,
                               { color: '#FF0000', lineWidth: 2 });
 
-                if (exercise === "squats") {
-                    trackSquats(results.poseLandmarks);
-                } else if (exercise === "curls") {
+                if (exercise === "curls") {
                     trackCurls(results.poseLandmarks);
                 } else if (exercise === "jumpingjacks") {
                     trackJumpingJacks(results.poseLandmarks);
+                } else if (exercise === "squats") {
+                    trackSquats(results.poseLandmarks);
                 }
             }
         }
@@ -348,20 +354,9 @@
             return angle;
         }
 
-        function trackSquats(landmarks) {
-            const hip = landmarks[24];
-            const knee = landmarks[26];
-            const ankle = landmarks[28];
-            const angle = calculateAngle(hip, knee, ankle);
-
-            if (angle > 160) stage = "up";
-            if (angle < 70 && stage === "up") {
-                stage = "down";
-                incrementReps();
-            }
-        }
-
         function trackCurls(landmarks) {
+            if (isResting) return; // Skip tracking during rest period
+
             const shoulder = landmarks[12];
             const elbow = landmarks[14];
             const wrist = landmarks[16];
@@ -370,11 +365,13 @@
             if (angle > 160) stage = "down";
             if (angle < 30 && stage === "down") {
                 stage = "up";
-                incrementReps();
+                incrementCounter();
             }
         }
 
         function trackJumpingJacks(landmarks) {
+            if (isResting) return; // Skip tracking during rest period
+
             const leftShoulder = landmarks[11];
             const rightShoulder = landmarks[12];
             const leftWrist = landmarks[15];
@@ -386,38 +383,57 @@
                 stage = "up";
             } else if (stage === "up" && !leftHandAboveShoulder && !rightHandAboveShoulder) {
                 stage = "down";
-                incrementReps();
+                incrementCounter();
             }
         }
 
-        function incrementReps() {
+        function trackSquats(landmarks) {
+            if (isResting) return; // Skip tracking during rest period
+
+            const hip = landmarks[24];
+            const knee = landmarks[26];
+            const ankle = landmarks[28];
+            const angle = calculateAngle(hip, knee, ankle);
+
+            if (angle > 160) stage = "up";
+            if (angle < 70 && stage === "up") {
+                stage = "down";
+                incrementCounter();
+            }
+        }
+
+        function incrementCounter() {
             currentReps++;
-            updateProgress();
+            totalRepsCompleted++;
+            counterElement.innerText = Set: ${currentSet} | Reps: ${currentReps};
+
+            const progressPercent = (totalRepsCompleted / totalReps) * 100;
+            progressBar.style.width = ${progressPercent}%;
 
             if (currentReps >= repsPerSet) {
                 currentReps = 0;
                 currentSet++;
                 if (currentSet > sets) {
                     showCompletionPage();
-                } else {
-                    startRestTimer();
+                    return;
                 }
+                // Start rest countdown after completing each set
+                startRestCountdown(restTimeBetweenSets);
             }
         }
 
-        function startRestTimer() {
-            isResting = true; // Activate rest period
-            restTimerElement.style.display = 'block';
-            let timeLeft = restTime;
-            restCountdown.innerText = timeLeft;
+        function startRestCountdown(seconds) {
+            isResting = true; // Set resting flag to prevent counting during rest
+            countdownElement.style.display = "block";
+            countdownElement.innerText = Rest: ${seconds};
 
             const restInterval = setInterval(() => {
-                timeLeft--;
-                restCountdown.innerText = timeLeft;
-                if (timeLeft <= 0) {
+                seconds--;
+                countdownElement.innerText = Rest: ${seconds};
+                if (seconds <= 0) {
                     clearInterval(restInterval);
-                    restTimerElement.style.display = 'none';
-                    isResting = false; // Deactivate rest period and resume exercise tracking
+                    countdownElement.style.display = "none";
+                    isResting = false; // Resume tracking after rest period
                 }
             }, 1000);
         }
@@ -430,6 +446,7 @@
         function goToHome() {
             document.getElementById('completedPage').classList.remove('active');
             document.getElementById('question1').classList.add('active');
+            resetExercise(); 
         }
     </script>
 </body>
