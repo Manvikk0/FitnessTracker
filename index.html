@@ -67,6 +67,60 @@
         button:hover {
             background-color: #ff3366;
         }
+        /* Dynamic Island Style with Round Progress */
+        .dynamic-island {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 35px;
+            z-index: 10;
+        }
+        .circle-progress {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .circle-progress svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+        .circle-progress circle {
+            fill: none;
+            stroke-width: 10;
+        }
+        .circle-background {
+            stroke: #333;
+        }
+        .circle-foreground {
+            stroke: #ff007f;
+            stroke-dasharray: 251.2;
+            transition: stroke-dashoffset 0.3s;
+        }
+        .reps-count {
+            position: absolute;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        .island-content {
+            margin-left: 15px;
+            text-align: left;
+        }
+        .island-content h2 {
+            font-size: 1.4rem;
+            margin: 0;
+            color: #fff;
+        }
         /* Rest Timer Styling */
         .rest-timer {
             position: absolute;
@@ -157,6 +211,19 @@
             <video id="webcam" autoplay playsinline></video>
             <canvas id="output"></canvas>
         </div>
+        <!-- Dynamic Island with Round Progress Bar -->
+        <div class="dynamic-island" id="counter">
+            <div class="circle-progress">
+                <svg>
+                    <circle class="circle-background" cx="40" cy="40" r="40"></circle>
+                    <circle class="circle-foreground" cx="40" cy="40" r="40" style="stroke-dashoffset: 251.2;"></circle>
+                </svg>
+                <div class="reps-count" id="reps-count">0</div>
+            </div>
+            <div class="island-content">
+                <h2 id="exercise-name"></h2>
+            </div>
+        </div>
         <!-- Rest Timer Display -->
         <div class="rest-timer" id="rest-timer">Rest: <span id="timer">0</span>s</div>
     </div>
@@ -179,6 +246,9 @@
         const videoElement = document.getElementById('webcam');
         const canvasElement = document.getElementById('output');
         const canvasCtx = canvasElement.getContext('2d');
+        const counterElement = document.getElementById('reps-count');
+        const exerciseNameElement = document.getElementById('exercise-name');
+        const progressCircle = document.querySelector('.circle-foreground');
         const restTimerElement = document.getElementById('rest-timer');
         const restCountdown = document.getElementById('timer');
 
@@ -196,6 +266,7 @@
             stage = null;
             isResting = false;
 
+            exerciseNameElement.innerText = exercise.charAt(0).toUpperCase() + exercise.slice(1);
             document.getElementById('question4').classList.remove('active');
             document.getElementById('exercisePage').classList.add('active');
 
@@ -204,7 +275,7 @@
 
         function updateProgress() {
             const progress = (currentReps / repsPerSet) * circleCircumference;
-            progressCircle.style.strokeDashoffset = circleCircumference - progress;
+            progressCircle.style.stroke-dashoffset = circleCircumference - progress;
             counterElement.innerText = currentReps;
         }
 
