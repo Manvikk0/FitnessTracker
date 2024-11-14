@@ -5,185 +5,179 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercise Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: 'Roboto', sans-serif;
-    }
-    body, html {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #f3f4f6;
-        color: #333;
-        overflow: hidden;
-    }
-    .page {
-        width: 100%;
-        height: 100%;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        text-align: center;
-        padding: 20px;
-    }
-    .active {
-        display: flex;
-    }
-    h1 {
-        font-size: 2.5rem;
-        color: #0056b3;
-        margin-bottom: 2rem;
-        text-align: center;
-    }
-    label {
-        font-size: 1.8rem;
-        margin-bottom: 1.5rem;
-        color: #333;
-        text-align: center;
-        width: 100%;
-    }
-    select, input, button {
-        font-size: 1.8rem;
-        margin: 1rem 0;
-        padding: 12px 15px;
-        width: 90%;
-        max-width: 400px;
-        border-radius: 8px;
-        border: none;
-        outline: none;
-        transition: all 0.3s ease;
-        text-align: center;
-    }
-    select, input {
-        background-color: #e0e0e0;
-        color: #333;
-    }
-    button {
-        background-color: #0056b3;
-        color: #fff;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #003e8a;
-    }
-    /* Countdown Timer Styling */
-    #countdown {
-        font-size: 5rem;
-        color: #FF0000;
-        animation: fade 1s ease;
-        z-index: 10;
-        margin-bottom: 20px;
-    }
-    @keyframes fade {
-        from { opacity: 1; }
-        to { opacity: 0; }
-    }
-    /* Camera Page Styling */
-    #video-container {
-        position: relative;
-        width: 100%;
-        max-width: 400px;
-        aspect-ratio: 4/3;
-        margin-top: 10px;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-    video, canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-    #counter {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        font-size: 1.5rem;
-        color: #ffffff;
-        background: rgba(0, 0, 0, 0.7);
-        padding: 10px;
-        border-radius: 8px;
-        z-index: 5;
-    }
-    #status {
-        font-size: 1.8rem;
-        color: #0056b3;
-        text-align: center;
-        margin-top: 15px;
-    }
-    /* Progress Bar Styling */
-    .progress-container {
-        width: 100%;
-        max-width: 400px;
-        height: 15px;
-        background-color: #e0e0e0;
-        border-radius: 12px;
-        overflow: hidden;
-        margin-top: 15px;
-    }
-    .progress-bar {
-        height: 100%;
-        background-color: #0056b3;
-        width: 0%;
-        transition: width 0.3s ease;
-    }
-    /* Exercise Completed Page */
-    .completed-message {
-        font-size: 2.5rem;
-        color: #28a745;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-    .home-button {
-        font-size: 1.5rem;
-        padding: 15px 30px;
-        background-color: #0056b3;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    .home-button:hover {
-        background-color: #003e8a;
-    }
-
-    /* Adjustments for smaller screens */
-    @media (max-width: 768px) {
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+        .page {
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+        .active {
+            display: flex;
+        }
         h1 {
             font-size: 2rem;
+            color: #fff;
+            margin-bottom: 2rem;
+            text-align: center;
         }
         label {
             font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ccc;
+            text-align: center;
+            width: 100%;
         }
         select, input, button {
-            font-size: 1.5rem;
-            padding: 10px 12px;
-        }
-        #counter {
             font-size: 1.2rem;
+            margin: 0.5rem 0;
+            padding: 10px 15px;
+            width: 90%;
+            max-width: 350px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            text-align: center;
         }
-        #status {
-            font-size: 1.5rem;
+        select, input {
+            background-color: #333;
+            color: #fff;
         }
+        button {
+            background-color: #ff007f;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ff3366;
+        }
+        /* Countdown Timer Styling */
         #countdown {
             font-size: 4rem;
+            color: #ff007f;
+            z-index: 10;
+            margin-bottom: 20px;
         }
+        /* Camera Page Styling */
+        #video-container {
+            position: relative;
+            width: 100%;
+            max-width: 375px;
+            aspect-ratio: 9/16;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(255, 0, 127, 0.2);
+            margin-top: 20px;
+        }
+        video, canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #counter {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 50px;
+            z-index: 5;
+        }
+        #status {
+            font-size: 1.2rem;
+            color: #ff007f;
+            text-align: center;
+            margin-top: 20px;
+        }
+        /* Progress Bar Styling */
+        .progress-container {
+            width: 90%;
+            max-width: 350px;
+            height: 8px;
+            background-color: #333;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #ff007f;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        /* Exercise Completed Page */
         .completed-message {
             font-size: 2rem;
+            color: #28a745;
+            margin-bottom: 20px;
+            text-align: center;
         }
-    }
-</style>
+        .home-button {
+            font-size: 1rem;
+            padding: 10px 20px;
+            background-color: #ff007f;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .home-button:hover {
+            background-color: #ff3366;
+        }
 
+        /* Adjustments for smaller screens */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            label {
+                font-size: 1.3rem;
+            }
+            select, input, button {
+                font-size: 1.2rem;
+                padding: 10px 12px;
+            }
+            #counter {
+                font-size: 1.2rem;
+                padding: 8px 16px;
+            }
+            #status {
+                font-size: 1rem;
+            }
+            #countdown {
+                font-size: 3rem;
+            }
+            .completed-message {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Page 1: Exercise Selection -->
@@ -244,7 +238,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils"></script>
-
     <script>
         function nextQuestion(current, next) {
             document.getElementById(current).classList.remove('active');
@@ -260,7 +253,7 @@
 
         let exercise, sets, repsPerSet, totalReps, totalRepsCompleted, currentSet, currentReps, stage;
         let restTimeBetweenSets;
-        let isResting = false; // Flag to control tracking during rest periods
+        let isResting = false;
 
         function resetExercise() {
             exercise = "";
@@ -290,7 +283,7 @@
             document.getElementById('question4').classList.remove('active');
             document.getElementById('exercisePage').classList.add('active');
 
-            startCountdown(5); // Start a 5-second countdown before beginning the exercise
+            startCountdown(5);
         }
 
         function startCountdown(seconds) {
@@ -352,7 +345,7 @@
         }
 
         function onPoseResults(results) {
-            if (isResting) return; // Skip processing during rest period
+            if (isResting) return;
 
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
             if (results.poseLandmarks) {
@@ -379,7 +372,7 @@
         }
 
         function trackCurls(landmarks) {
-            if (isResting) return; // Skip tracking during rest period
+            if (isResting) return;
 
             const shoulder = landmarks[12];
             const elbow = landmarks[14];
@@ -394,7 +387,7 @@
         }
 
         function trackJumpingJacks(landmarks) {
-            if (isResting) return; // Skip tracking during rest period
+            if (isResting) return;
 
             const leftShoulder = landmarks[11];
             const rightShoulder = landmarks[12];
@@ -412,7 +405,7 @@
         }
 
         function trackSquats(landmarks) {
-            if (isResting) return; // Skip tracking during rest period
+            if (isResting) return;
 
             const hip = landmarks[24];
             const knee = landmarks[26];
@@ -441,13 +434,12 @@
                     showCompletionPage();
                     return;
                 }
-                // Start rest countdown after completing each set
                 startRestCountdown(restTimeBetweenSets);
             }
         }
 
         function startRestCountdown(seconds) {
-            isResting = true; // Set resting flag to prevent counting during rest
+            isResting = true;
             countdownElement.style.display = "block";
             countdownElement.innerText = `Rest: ${seconds}`;
 
@@ -457,7 +449,7 @@
                 if (seconds <= 0) {
                     clearInterval(restInterval);
                     countdownElement.style.display = "none";
-                    isResting = false; // Resume tracking after rest period
+                    isResting = false;
                 }
             }, 1000);
         }
