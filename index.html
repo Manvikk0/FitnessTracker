@@ -15,22 +15,19 @@
         body, html {
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
             background-color: #000;
             color: #fff;
-            overflow: hidden;
         }
         .page {
-            width: 100%;
-            height: 100%;
             display: none;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             text-align: center;
             padding: 20px;
+            width: 100%;
+            height: 100%;
         }
         .active {
             display: flex;
@@ -39,13 +36,11 @@
             font-size: 2rem;
             color: #fff;
             margin-bottom: 2rem;
-            text-align: center;
         }
         label {
             font-size: 1.5rem;
             margin-bottom: 1rem;
             color: #ccc;
-            text-align: center;
             width: 100%;
         }
         select, input, button {
@@ -72,23 +67,32 @@
         button:hover {
             background-color: #ff3366;
         }
-        /* Countdown Timer Styling */
-        #countdown {
-            font-size: 4rem;
-            color: #ff007f;
-            z-index: 10;
-            margin-bottom: 20px;
-        }
-        /* Camera Page Styling */
-        #video-container {
-            position: relative;
-            width: 100%;
-            max-width: 375px;
-            aspect-ratio: 9/16;
+        /* Dynamic Island Style */
+        .dynamic-island {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.7);
             border-radius: 20px;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        /* Full-screen Video Styling */
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(255, 0, 127, 0.2);
-            margin-top: 20px;
+            z-index: 1;
         }
         video, canvas {
             position: absolute;
@@ -96,41 +100,8 @@
             left: 0;
             width: 100%;
             height: 100%;
+            object-fit: cover;
         }
-        #counter {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 50px;
-            z-index: 5;
-        }
-        #status {
-            font-size: 1.2rem;
-            color: #ff007f;
-            text-align: center;
-            margin-top: 20px;
-        }
-        /* Progress Bar Styling */
-        .progress-container {
-            width: 90%;
-            max-width: 350px;
-            height: 8px;
-            background-color: #333;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 15px;
-        }
-        .progress-bar {
-            height: 100%;
-            background-color: #ff007f;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        /* Exercise Completed Page */
         .completed-message {
             font-size: 2rem;
             color: #28a745;
@@ -149,33 +120,6 @@
         }
         .home-button:hover {
             background-color: #ff3366;
-        }
-
-        /* Adjustments for smaller screens */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8rem;
-            }
-            label {
-                font-size: 1.3rem;
-            }
-            select, input, button {
-                font-size: 1.2rem;
-                padding: 10px 12px;
-            }
-            #counter {
-                font-size: 1.2rem;
-                padding: 8px 16px;
-            }
-            #status {
-                font-size: 1rem;
-            }
-            #countdown {
-                font-size: 3rem;
-            }
-            .completed-message {
-                font-size: 1.8rem;
-            }
         }
     </style>
 </head>
@@ -213,20 +157,14 @@
         <button onclick="startExercise()">Start Exercise</button>
     </div>
 
-    <!-- Page 2: Exercise Tracking with Countdown -->
+    <!-- Page 2: Exercise Tracking with Full-Screen Video -->
     <div id="exercisePage" class="page">
-        <h1>Exercise Tracker</h1>
-        <div id="countdown"></div>
         <div id="video-container">
-            <div id="counter">Set: 1 | Reps: 0</div>
             <video id="webcam" autoplay playsinline></video>
             <canvas id="output"></canvas>
         </div>
-        <p id="status"></p>
-        <!-- Progress Bar -->
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
+        <!-- Dynamic Island Counter -->
+        <div class="dynamic-island" id="counter">Exercise: 0</div>
     </div>
 
     <!-- Page 3: Exercise Completed -->
@@ -248,58 +186,21 @@
         const canvasElement = document.getElementById('output');
         const canvasCtx = canvasElement.getContext('2d');
         const counterElement = document.getElementById('counter');
-        const progressBar = document.getElementById('progress-bar');
-        const countdownElement = document.getElementById('countdown');
 
-        let exercise, sets, repsPerSet, totalReps, totalRepsCompleted, currentSet, currentReps, stage;
-        let restTimeBetweenSets;
-        let isResting = false;
-
-        function resetExercise() {
-            exercise = "";
-            sets = 0;
-            repsPerSet = 0;
-            totalReps = 0;
-            totalRepsCompleted = 0;
-            currentSet = 1;
-            currentReps = 0;
-            stage = null;
-            isResting = false;
-            counterElement.innerText = `Set: 1 | Reps: 0`;
-            progressBar.style.width = "0%";
-        }
+        let exercise, sets, repsPerSet, totalReps, currentReps, currentSet, stage;
 
         function startExercise() {
             exercise = document.getElementById('exercise').value;
             sets = parseInt(document.getElementById('sets').value);
             repsPerSet = parseInt(document.getElementById('reps').value);
-            restTimeBetweenSets = parseInt(document.getElementById('restTime').value);
-            totalReps = sets * repsPerSet;
-            totalRepsCompleted = 0;
-            currentSet = 1;
             currentReps = 0;
+            currentSet = 1;
             stage = null;
 
             document.getElementById('question4').classList.remove('active');
             document.getElementById('exercisePage').classList.add('active');
 
-            startCountdown(5);
-        }
-
-        function startCountdown(seconds) {
-            countdownElement.style.display = "block";
-            countdownElement.innerText = seconds;
-
-            const countdownInterval = setInterval(() => {
-                seconds--;
-                if (seconds > 0) {
-                    countdownElement.innerText = seconds;
-                } else {
-                    clearInterval(countdownInterval);
-                    countdownElement.style.display = "none";
-                    initializeExerciseTracking();
-                }
-            }, 1000);
+            initializeExerciseTracking();
         }
 
         function initializeExerciseTracking() {
@@ -345,8 +246,6 @@
         }
 
         function onPoseResults(results) {
-            if (isResting) return;
-
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
             if (results.poseLandmarks) {
                 drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
@@ -354,11 +253,7 @@
                 drawLandmarks(canvasCtx, results.poseLandmarks,
                               { color: '#FF0000', lineWidth: 2 });
 
-                if (exercise === "curls") {
-                    trackCurls(results.poseLandmarks);
-                } else if (exercise === "jumpingjacks") {
-                    trackJumpingJacks(results.poseLandmarks);
-                } else if (exercise === "squats") {
+                if (exercise === "squats") {
                     trackSquats(results.poseLandmarks);
                 }
             }
@@ -371,42 +266,7 @@
             return angle;
         }
 
-        function trackCurls(landmarks) {
-            if (isResting) return;
-
-            const shoulder = landmarks[12];
-            const elbow = landmarks[14];
-            const wrist = landmarks[16];
-            const angle = calculateAngle(shoulder, elbow, wrist);
-
-            if (angle > 160) stage = "down";
-            if (angle < 30 && stage === "down") {
-                stage = "up";
-                incrementCounter();
-            }
-        }
-
-        function trackJumpingJacks(landmarks) {
-            if (isResting) return;
-
-            const leftShoulder = landmarks[11];
-            const rightShoulder = landmarks[12];
-            const leftWrist = landmarks[15];
-            const rightWrist = landmarks[16];
-            const leftHandAboveShoulder = leftWrist.y < leftShoulder.y - 0.15;
-            const rightHandAboveShoulder = rightWrist.y < rightShoulder.y - 0.15;
-
-            if (leftHandAboveShoulder && rightHandAboveShoulder) {
-                stage = "up";
-            } else if (stage === "up" && !leftHandAboveShoulder && !rightHandAboveShoulder) {
-                stage = "down";
-                incrementCounter();
-            }
-        }
-
         function trackSquats(landmarks) {
-            if (isResting) return;
-
             const hip = landmarks[24];
             const knee = landmarks[26];
             const ankle = landmarks[28];
@@ -415,54 +275,14 @@
             if (angle > 160) stage = "up";
             if (angle < 70 && stage === "up") {
                 stage = "down";
-                incrementCounter();
+                currentReps++;
+                counterElement.innerText = `${exercise.charAt(0).toUpperCase() + exercise.slice(1)}: ${currentReps}`;
             }
-        }
-
-        function incrementCounter() {
-            currentReps++;
-            totalRepsCompleted++;
-            counterElement.innerText = `Set: ${currentSet} | Reps: ${currentReps}`;
-
-            const progressPercent = (totalRepsCompleted / totalReps) * 100;
-            progressBar.style.width = `${progressPercent}%`;
-
-            if (currentReps >= repsPerSet) {
-                currentReps = 0;
-                currentSet++;
-                if (currentSet > sets) {
-                    showCompletionPage();
-                    return;
-                }
-                startRestCountdown(restTimeBetweenSets);
-            }
-        }
-
-        function startRestCountdown(seconds) {
-            isResting = true;
-            countdownElement.style.display = "block";
-            countdownElement.innerText = `Rest: ${seconds}`;
-
-            const restInterval = setInterval(() => {
-                seconds--;
-                countdownElement.innerText = `Rest: ${seconds}`;
-                if (seconds <= 0) {
-                    clearInterval(restInterval);
-                    countdownElement.style.display = "none";
-                    isResting = false;
-                }
-            }, 1000);
-        }
-
-        function showCompletionPage() {
-            document.getElementById('exercisePage').classList.remove('active');
-            document.getElementById('completedPage').classList.add('active');
         }
 
         function goToHome() {
             document.getElementById('completedPage').classList.remove('active');
             document.getElementById('question1').classList.add('active');
-            resetExercise(); 
         }
     </script>
 </body>
