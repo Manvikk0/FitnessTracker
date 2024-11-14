@@ -1,4 +1,4 @@
-<!<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -77,14 +77,14 @@
             align-items: center;
             justify-content: center;
             background-color: rgba(0, 0, 0, 0.8);
-            padding: 10px;
-            border-radius: 25px;
+            padding: 20px;
+            border-radius: 35px;
             z-index: 10;
         }
         .circle-progress {
             position: relative;
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -96,27 +96,30 @@
         }
         .circle-progress circle {
             fill: none;
-            stroke-width: 8;
+            stroke-width: 10;
         }
         .circle-background {
             stroke: #333;
         }
         .circle-foreground {
             stroke: #ff007f;
-            stroke-dasharray: 188.4;
+            stroke-dasharray: 251.2;
             transition: stroke-dashoffset 0.3s;
         }
+        .reps-count {
+            position: absolute;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+        }
         .island-content {
-            margin-left: 10px;
+            margin-left: 15px;
             text-align: left;
         }
         .island-content h2 {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             margin: 0;
-        }
-        .island-content p {
-            font-size: 0.9rem;
-            color: #ccc;
+            color: #fff;
         }
         /* Full-screen Video Styling */
         #video-container {
@@ -201,13 +204,13 @@
         <div class="dynamic-island" id="counter">
             <div class="circle-progress">
                 <svg>
-                    <circle class="circle-background" cx="30" cy="30" r="30"></circle>
-                    <circle class="circle-foreground" cx="30" cy="30" r="30" style="stroke-dashoffset: 188.4;"></circle>
+                    <circle class="circle-background" cx="40" cy="40" r="40"></circle>
+                    <circle class="circle-foreground" cx="40" cy="40" r="40" style="stroke-dashoffset: 251.2;"></circle>
                 </svg>
-                <div class="island-content">
-                    <h2 id="exercise-name">Exercise: 0</h2>
-                    <p id="exercise-count">Squats: 0</p>
-                </div>
+                <div class="reps-count" id="reps-count">0</div>
+            </div>
+            <div class="island-content">
+                <h2 id="exercise-name">Exercise: </h2>
             </div>
         </div>
     </div>
@@ -230,12 +233,12 @@
         const videoElement = document.getElementById('webcam');
         const canvasElement = document.getElementById('output');
         const canvasCtx = canvasElement.getContext('2d');
-        const counterElement = document.getElementById('exercise-count');
+        const counterElement = document.getElementById('reps-count');
         const exerciseNameElement = document.getElementById('exercise-name');
         const progressCircle = document.querySelector('.circle-foreground');
 
-        let exercise, sets, repsPerSet, totalReps, currentReps, currentSet, stage;
-        const circleCircumference = 188.4; // Adjust based on circle radius in SVG
+        let exercise, sets, repsPerSet, currentReps, currentSet, stage;
+        const circleCircumference = 251.2; // Circumference based on radius in SVG (r=40)
 
         function startExercise() {
             exercise = document.getElementById('exercise').value;
@@ -245,7 +248,7 @@
             currentSet = 1;
             stage = null;
 
-            exerciseNameElement.innerText = `Exercise: ${exercise.charAt(0).toUpperCase() + exercise.slice(1)}`;
+            exerciseNameElement.innerText = exercise.charAt(0).toUpperCase() + exercise.slice(1);
             document.getElementById('question4').classList.remove('active');
             document.getElementById('exercisePage').classList.add('active');
 
@@ -255,6 +258,7 @@
         function updateProgress() {
             const progress = (currentReps / repsPerSet) * circleCircumference;
             progressCircle.style.strokeDashoffset = circleCircumference - progress;
+            counterElement.innerText = currentReps;
         }
 
         function initializeExerciseTracking() {
@@ -330,7 +334,6 @@
             if (angle < 70 && stage === "up") {
                 stage = "down";
                 currentReps++;
-                counterElement.innerText = `${exercise.charAt(0).toUpperCase() + exercise.slice(1)}: ${currentReps}`;
                 updateProgress();
             }
         }
