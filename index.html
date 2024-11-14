@@ -121,6 +121,17 @@
             margin: 0;
             color: #fff;
         }
+        /* Rest Timer Styling */
+        .rest-timer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: #ff007f;
+            display: none;
+            text-align: center;
+        }
         /* Full-screen Video Styling */
         #video-container {
             position: absolute;
@@ -213,6 +224,8 @@
                 <h2 id="exercise-name"></h2>
             </div>
         </div>
+        <!-- Rest Timer Display -->
+        <div class="rest-timer" id="rest-timer">Rest: <span id="timer">0</span>s</div>
     </div>
 
     <!-- Page 3: Exercise Completed -->
@@ -236,14 +249,17 @@
         const counterElement = document.getElementById('reps-count');
         const exerciseNameElement = document.getElementById('exercise-name');
         const progressCircle = document.querySelector('.circle-foreground');
+        const restTimerElement = document.getElementById('rest-timer');
+        const restCountdown = document.getElementById('timer');
 
-        let exercise, sets, repsPerSet, currentReps, currentSet, stage;
+        let exercise, sets, repsPerSet, currentReps, currentSet, restTime, stage;
         const circleCircumference = 251.2; // Circumference based on radius in SVG (r=40)
 
         function startExercise() {
             exercise = document.getElementById('exercise').value;
             sets = parseInt(document.getElementById('sets').value);
             repsPerSet = parseInt(document.getElementById('reps').value);
+            restTime = parseInt(document.getElementById('restTime').value);
             currentReps = 0;
             currentSet = 1;
             stage = null;
@@ -337,8 +353,7 @@
             if (angle > 160) stage = "up";
             if (angle < 70 && stage === "up") {
                 stage = "down";
-                currentReps++;
-                updateProgress();
+                incrementReps();
             }
         }
 
@@ -351,8 +366,7 @@
             if (angle > 160) stage = "down";
             if (angle < 30 && stage === "down") {
                 stage = "up";
-                currentReps++;
-                updateProgress();
+                incrementReps();
             }
         }
 
@@ -368,9 +382,43 @@
                 stage = "up";
             } else if (stage === "up" && !leftHandAboveShoulder && !rightHandAboveShoulder) {
                 stage = "down";
-                currentReps++;
-                updateProgress();
+                incrementReps();
             }
+        }
+
+        function incrementReps() {
+            currentReps++;
+            updateProgress();
+
+            if (currentReps >= repsPerSet) {
+                currentReps = 0;
+                currentSet++;
+                if (currentSet > sets) {
+                    showCompletionPage();
+                } else {
+                    startRestTimer();
+                }
+            }
+        }
+
+        function startRestTimer() {
+            restTimerElement.style.display = 'block';
+            let timeLeft = restTime;
+            restCountdown.innerText = timeLeft;
+
+            const restInterval = setInterval(() => {
+                timeLeft--;
+                restCountdown.innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(restInterval);
+                    restTimerElement.style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        function showCompletionPage() {
+            document.getElementById('exercisePage').classList.remove('active');
+            document.getElementById('completedPage').classList.add('active');
         }
 
         function goToHome() {
