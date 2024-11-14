@@ -210,7 +210,7 @@
                 <div class="reps-count" id="reps-count">0</div>
             </div>
             <div class="island-content">
-                <h2 id="exercise-name">Exercise: </h2>
+                <h2 id="exercise-name"></h2>
             </div>
         </div>
     </div>
@@ -313,6 +313,10 @@
 
                 if (exercise === "squats") {
                     trackSquats(results.poseLandmarks);
+                } else if (exercise === "curls") {
+                    trackCurls(results.poseLandmarks);
+                } else if (exercise === "jumpingjacks") {
+                    trackJumpingJacks(results.poseLandmarks);
                 }
             }
         }
@@ -332,6 +336,37 @@
 
             if (angle > 160) stage = "up";
             if (angle < 70 && stage === "up") {
+                stage = "down";
+                currentReps++;
+                updateProgress();
+            }
+        }
+
+        function trackCurls(landmarks) {
+            const shoulder = landmarks[12];
+            const elbow = landmarks[14];
+            const wrist = landmarks[16];
+            const angle = calculateAngle(shoulder, elbow, wrist);
+
+            if (angle > 160) stage = "down";
+            if (angle < 30 && stage === "down") {
+                stage = "up";
+                currentReps++;
+                updateProgress();
+            }
+        }
+
+        function trackJumpingJacks(landmarks) {
+            const leftShoulder = landmarks[11];
+            const rightShoulder = landmarks[12];
+            const leftWrist = landmarks[15];
+            const rightWrist = landmarks[16];
+            const leftHandAboveShoulder = leftWrist.y < leftShoulder.y - 0.15;
+            const rightHandAboveShoulder = rightWrist.y < rightShoulder.y - 0.15;
+
+            if (leftHandAboveShoulder && rightHandAboveShoulder) {
+                stage = "up";
+            } else if (stage === "up" && !leftHandAboveShoulder && !rightHandAboveShoulder) {
                 stage = "down";
                 currentReps++;
                 updateProgress();
